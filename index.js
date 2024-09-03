@@ -6,7 +6,11 @@ const PORT = 3000 // The port your webhook server will run on
 
 app.use(express.json())
 
-app.post("/deploy", (req, res) => {
+app.get("/", (req, res) => {
+  res.send("Hello World!")
+})
+
+app.get("/deploy", (req, res) => {
   const secret = req.headers["x-webhook-secret"]
   const github_token = req.headers["x-github-token"]
   const github_repo = req.headers["x-github-repo"]
