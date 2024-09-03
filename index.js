@@ -48,29 +48,45 @@ app.get("/deploy", (req, res) => {
 
   const checkout = `
     sudo -u ${user} bash -c '
-    cd "${appDir}" &&
-    git pull &&
-    git checkout ${github_branch} &&
+    cd "${appDir}"
+    git pull
+    git checkout ${github_branch}
     npm install
     '
   `
+  
+  const stopPM2 = `sudo -u ${user} bash -c '
+    cd "${appDir}" 
+    pm2 start npm --name "${user}_${github_branch}" -- stop
+  '
+  `
 
-  const stopPM2 = `pm2 stop all`
-  const build = `npm run build`
-  const startPM2 = `pm2 start all`
+  const build = `sudo -u ${user} bash -c '
+    cd "${appDir}" 
+    npm run build
+  '
+  `
+
+  const startPM2 = `sudo -u ${user} bash -c '
+    cd "${appDir}" 
+    pm2 start npm --name "${user}_${github_branch}" -- start
+  '
+  `
+
+
 
   runCommand(checkIfGitRepo, res, user, () => {
     runCommand(checkout, res, user, () => {
       runCommand(stopPM2, res, user, () => {
         runCommand(build, res, user, () => {
           runCommand(startPM2, res, user, () => {
-            res.send(`Deployment successful for user ${user}!`);
-          });
-        });
-      });
-    });
-  });
-});
+            res.send(`Deployment successful for user ${user}!`)
+          })
+        })
+      })
+    })
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`Webhook listener running on port ${PORT}`)
@@ -79,25 +95,27 @@ app.listen(PORT, () => {
 function runCommand(command, res, user, callback) {
   exec(command, (error, stdout, stderr) => {
     if (error) {
-      console.error(`Exec error: ${error}`);
+      console.error(`Exec error: ${error}`)
 
       // Check for the specific PM2 error about no process found and skip it
       if (stderr.includes("[PM2][WARN] No process found")) {
-        console.warn(`PM2 warning skipped for user ${user}: ${stderr}`);
+        console.warn(`PM2 warning skipped for user ${user}: ${stderr}`)
         if (callback) {
-          return callback(); // Continue with the next step
+          return callback() // Continue with the next step
         }
       } else {
-        return res.status(500).send(`Error deploying the application for user ${user}: ${stderr}`);
+        return res
+          .status(500)
+          .send(`Error deploying the application for user ${user}: ${stderr}`)
       }
     } else {
-      console.log(`Deployment output for user ${user}: ${stdout}`);
+      console.log(`Deployment output for user ${user}: ${stdout}`)
       if (stderr) {
-        console.warn(`Deployment warning for user ${user}: ${stderr}`);
+        console.warn(`Deployment warning for user ${user}: ${stderr}`)
       }
       if (callback) {
-        callback();
+        callback()
       }
     }
-  });
+  })
 }
