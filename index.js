@@ -54,7 +54,7 @@ app.get("/deploy", (req, res) => {
     npm install
     '
   `
-  
+
   const stopPM2 = `sudo -u ${user} bash -c '
     cd "${appDir}" 
     pm2 start npm --name "${user}_${github_branch}" -- stop
@@ -73,20 +73,22 @@ app.get("/deploy", (req, res) => {
   '
   `
 
-
-
   runCommand(checkIfGitRepo, res, user, () => {
     runCommand(checkout, res, user, () => {
       runCommand(stopPM2, res, user, () => {
         runCommand(build, res, user, () => {
-          runCommand(startPM2, res, user, () => {
-            res.send(`Deployment successful for user ${user}!`)
-          })
-        })
-      })
-    })
-  })
-})
+          runCommand(startPM2, res, user, (stdout, stderr) => {
+            // Send the output of pm2 start as the response
+            if (stderr) {
+              console.warn(`Deployment warning for user ${user}: ${stderr}`);
+            }
+            res.send(`Deployment successful for user ${user}!\nPM2 Output:\n${stdout}`);
+          });
+        });
+      });
+    });
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Webhook listener running on port ${PORT}`)
