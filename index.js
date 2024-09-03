@@ -54,9 +54,9 @@ app.get("/deploy", (req, res) => {
 
   runCommand(checkIfGitRepo)
   runCommand(checkout)
-  runCommand(stopPM2)
-  runCommand(build)
-  runCommand(startPM2)
+  // runCommand(stopPM2)
+  // runCommand(build)
+  // runCommand(startPM2)
 
   res.send(`Deployment successful for user ${user}!`)
 })
