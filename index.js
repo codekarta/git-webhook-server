@@ -18,7 +18,7 @@ app.get("/deploy", (req, res) => {
 
   const user = github_repo.split("/")[1]
 
-  if (secret !== "YOUR_SECRET_TOKEN") {
+  if (secret !== "238362fabd29a2b4b346dcf1711f121de54f3d763d9603d18afd24d6f0c075b9") {
     return res.status(403).send("Forbidden")
   }
 
