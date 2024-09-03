@@ -64,14 +64,13 @@ app.get("/deploy", (req, res) => {
       runCommand(stopPM2, res, user, () => {
         runCommand(build, res, user, () => {
           runCommand(startPM2, res, user, () => {
-            res.send(`Deployment successful for user ${user}!`)
-          })
-        })
-      })
-      res.send(`Deployment successful for user ${user}!`)
-    })
-  })
-})
+            res.send(`Deployment successful for user ${user}!`);
+          });
+        });
+      });
+    });
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Webhook listener running on port ${PORT}`)
@@ -89,7 +88,7 @@ function runCommand(command, res, user, callback) {
           return callback(); // Continue with the next step
         }
       } else {
-        return res.status(500).send(`Error deploying the application for user ${user}`);
+        return res.status(500).send(`Error deploying the application for user ${user}: ${stderr}`);
       }
     } else {
       console.log(`Deployment output for user ${user}: ${stdout}`);
