@@ -58,6 +58,7 @@ app.get("/deploy", (req, res) => {
   const stopPM2 = `sudo -u ${user} bash -c '
     cd "${appDir}" 
     pm2 start npm --name "${user}_${github_branch}" -- stop
+    pm2 delete "${user}_${github_branch}"
   '
   `
 
