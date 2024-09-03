@@ -26,7 +26,7 @@ app.get("/deploy", (req, res) => {
 
   const checkIfGitRepo = `
     isGitRepo = false;
-    sudo -u ${user} bash -c 
+    sudo -u ${user} bash
     if [ -d "${appDir}" ]; then
       cd ${appDir} &&
       if [ -d ".git" ]; then
@@ -41,7 +41,7 @@ app.get("/deploy", (req, res) => {
   `
 
   const checkout = `
-    sudo -u ${user} bash -c 
+    sudo -u ${user} bash
     cd ${appDir} &&
     git pull &&
     git checkout ${github_branch} &&
