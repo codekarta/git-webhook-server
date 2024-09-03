@@ -69,7 +69,7 @@ app.get("/deploy", (req, res) => {
 
   const startPM2 = `sudo -u ${user} bash -c '
     cd "${appDir}" 
-    pm2 start npm --name "${user}_${github_branch}" -- start
+    pm2 start npm --name "${user}_${github_branch}" -- start /dev/null 2>&1 &
   '
   `
 
