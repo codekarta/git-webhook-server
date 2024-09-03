@@ -25,7 +25,7 @@ app.get("/deploy", (req, res) => {
   const appDir = `/home/${user}/app/${github_branch}` // Replace with the actual path to the user's app directory
 
   const checkIfGitRepo = `
-    sudo -u ${user} bash <<EOF
+    sudo -u ${user} bash <<'EOF'
     isGitRepo=false;
     if [ -d "${appDir}" ]; then
       cd ${appDir}
@@ -38,8 +38,7 @@ app.get("/deploy", (req, res) => {
       cd ${appDir}
       git clone https://${github_token}@github.com/${github_repo}.git .
     fi
-    EOF
-  `
+    EOF`
 
   const checkout = `
     sudo -u ${user} bash
@@ -53,11 +52,11 @@ app.get("/deploy", (req, res) => {
   const build = `npm run build`
   const startPM2 = `pm2 start all`
 
-  runCommand(checkIfGitRepo, res)
-  runCommand(checkout, res)
-  // runCommand(stopPM2, res)
-  // runCommand(build, res)
-  // runCommand(startPM2, res)
+  runCommand(checkIfGitRepo, res, user)
+  runCommand(checkout, res, user)
+  // runCommand(stopPM2, res, user)
+  // runCommand(build, res, user)
+  // runCommand(startPM2, res, user)
 
   res.send(`Deployment successful for user ${user}!`)
 })
@@ -66,7 +65,7 @@ app.listen(PORT, () => {
   console.log(`Webhook listener running on port ${PORT}`)
 })
 
-function runCommand(command, res) {
+function runCommand(command, res, user) {
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`Exec error: ${error}`)
