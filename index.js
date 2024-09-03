@@ -26,7 +26,7 @@ app.get("/deploy", (req, res) => {
 
   const checkIfGitRepo = `
     sudo -u ${user} bash <<EOF
-    isGitRepo = false;
+    isGitRepo=false;
     if [ -d "${appDir}" ]; then
       cd ${appDir}
       if [ -d ".git" ]; then
