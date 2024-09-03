@@ -44,7 +44,7 @@ app.get("/deploy", (req, res) => {
     sudo -u ${user} bash -c '
     cd ${appDir} &&
     git pull &&
-    git checkout ${branch} &&
+    git checkout ${github_branch} &&
     npm install &&
   `
 
