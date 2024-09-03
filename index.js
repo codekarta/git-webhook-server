@@ -25,19 +25,20 @@ app.get("/deploy", (req, res) => {
   const appDir = `/home/${user}/app/${github_branch}` // Replace with the actual path to the user's app directory
 
   const checkIfGitRepo = `
+    sudo -u ${user} bash <<EOF
     isGitRepo = false;
-    sudo -u ${user} bash
     if [ -d "${appDir}" ]; then
-      cd ${appDir} &&
+      cd ${appDir}
       if [ -d ".git" ]; then
         echo "repo already exists"
       fi'    
     fi'
-    if [ ! "$isGitRepo" = "true" ]; then
-      mkdir -p ${appDir} &&
-      cd ${appDir} &&
-      git clone https://${github_token}@github.com/${github_repo}.git ${appDir}
+    if [ "$isGitRepo" = "false" ]; then
+      mkdir -p ${appDir}
+      cd ${appDir}
+      git clone https://${github_token}@github.com/${github_repo}.git .
     fi
+    EOF
   `
 
   const checkout = `
