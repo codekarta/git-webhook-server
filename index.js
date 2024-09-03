@@ -59,13 +59,13 @@ app.get("/deploy", (req, res) => {
   runCommand(checkIfGitRepo, res, user, () => {
     runCommand(checkout, res, user, () => {
       // Uncomment the next lines if you want to include stopping and starting the app.
-      // runCommand(stopPM2, res, user, () => {
-      //   runCommand(build, res, user, () => {
-      //     runCommand(startPM2, res, user, () => {
-      //       res.send(`Deployment successful for user ${user}!`);
-      //     });
-      //   });
-      // });
+      runCommand(stopPM2, res, user, () => {
+        runCommand(build, res, user, () => {
+          runCommand(startPM2, res, user, () => {
+            res.send(`Deployment successful for user ${user}!`);
+          });
+        });
+      });
       res.send(`Deployment successful for user ${user}!`);
     });
   });
