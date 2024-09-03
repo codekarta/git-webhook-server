@@ -19,7 +19,7 @@ app.get("/deploy", (req, res) => {
   const user = github_repo.split("/")[1]
 
   if (secret !== "238362fabd29a2b4b346dcf1711f121de54f3d763d9603d18afd24d6f0c075b9") {
-    return res.status(403).send("Forbidden")
+    res.status(403).send("Forbidden")
   }
 
   const appDir = `/home/${user}/app/${github_branch}` // Replace with the actual path to the user's app directory
@@ -53,11 +53,11 @@ app.get("/deploy", (req, res) => {
   const build = `npm run build`
   const startPM2 = `pm2 start all`
 
-  runCommand(checkIfGitRepo)
-  runCommand(checkout)
-  // runCommand(stopPM2)
-  // runCommand(build)
-  // runCommand(startPM2)
+  runCommand(checkIfGitRepo, res)
+  runCommand(checkout, res)
+  // runCommand(stopPM2, res)
+  // runCommand(build, res)
+  // runCommand(startPM2, res)
 
   res.send(`Deployment successful for user ${user}!`)
 })
@@ -66,7 +66,7 @@ app.listen(PORT, () => {
   console.log(`Webhook listener running on port ${PORT}`)
 })
 
-function runCommand(command) {
+function runCommand(command, res) {
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`Exec error: ${error}`)
