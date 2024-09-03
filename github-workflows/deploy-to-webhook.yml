@@ -28,7 +28,7 @@ jobs:
 
     - name: Trigger Deployment Webhook
       run: |
-         curl -X GET https://b786-223-233-80-12.ngrok-free.app/deploy \
+         curl -X GET http://62.72.13.18:23001/deploy \
           -H "x-webhook-secret: ${{ secrets.WEBHOOK_SECRET_TOKEN }} " \
           -H "x-github-token: ${{secrets.GITHUB_TOKEN}} " \
           -H "x-github-repo: ${{github.repository}} " \
