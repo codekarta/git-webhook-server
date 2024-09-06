@@ -15,8 +15,9 @@ app.get("/deploy", (req, res) => {
   const github_token = req.headers["x-github-token"]
   const github_repo = req.headers["x-github-repo"]
   const github_branch = req.headers["x-github-branch"]
+  const user = req.headers["x-server-namespace"]
 
-  const user = github_repo.split("/")[1]
+  const repo_name = github_repo.split("/")[1]
 
   if (
     secret !==
@@ -25,7 +26,7 @@ app.get("/deploy", (req, res) => {
     return res.status(403).send("Forbidden")
   }
 
-  const appDir = `/home/${user}/app/${github_branch}`
+  const appDir = `/home/${user}/app/${repo_name}/${github_branch}`
 
   const checkIfGitRepo = `
     sudo -u ${user} bash -c '
@@ -57,8 +58,8 @@ app.get("/deploy", (req, res) => {
 
   const stopPM2 = `sudo -u ${user} bash -c '
     cd "${appDir}" 
-    pm2 start npm --name "${user}_${github_branch}" -- stop
-    pm2 delete "${user}_${github_branch}"
+    pm2 start npm --name "${repo_name}_${github_branch}" -- stop
+    pm2 delete "${repo_name}_${github_branch}"
   '
   `
 
@@ -70,7 +71,7 @@ app.get("/deploy", (req, res) => {
 
   const startPM2 = `sudo -u ${user} bash -c '
     cd "${appDir}" 
-    nohup pm2 start npm --name "${user}_${github_branch}" -- start
+    nohup pm2 start npm --name "${repo_name}_${github_branch}" -- start
   '
   `
 

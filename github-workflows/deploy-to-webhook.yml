@@ -7,6 +7,9 @@ on:
       - develop
       - test
 
+env: 
+  namespace: 'hitlite.in'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest  # Specifies the environment to run the job on
@@ -32,4 +35,5 @@ jobs:
           -H "x-webhook-secret: ${{ secrets.WEBHOOK_SECRET_TOKEN }} " \
           -H "x-github-token: ${{secrets.GITHUB_TOKEN}} " \
           -H "x-github-repo: ${{github.repository}} " \
-          -H "x-github-branch: ${{github.ref_name}} "
+          -H "x-github-branch: ${{github.ref_name}} " \
+          -H "x-server-namespace: $namespace"
