@@ -1,14 +1,15 @@
+#this file should be placed inside .github/workflows folder
+
 name: Deploy to Webhook
 
 on:
   push:
     branches:
-      - main  # Triggers the workflow on pushes to the 'main' branch
-      - develop
-      - test
+      - main  # this is a production branch 
+      - test  # test branch 
 
 env: 
-  namespace: 'hitlite.in'
+  namespace: 'hitlite.in' # user in the server machine, where application is getting deployed
 
 jobs:
   deploy:
