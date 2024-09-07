@@ -34,7 +34,6 @@ jobs:
       run: |
          curl -X GET http://62.72.13.18:23001/deploy \
           -H "x-webhook-secret: 238362fabd29a2b4b346dcf1711f121de54f3d763d9603d18afd24d6f0c075b9" \
-          -H "x-github-token: ${{secrets.GITHUB_TOKEN}} " \
           -H "x-github-repo: ${{github.repository}} " \
           -H "x-github-branch: ${{github.ref_name}} " \
           -H "x-server-namespace: $namespace"
