@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 app.get("/deploy", (req, res) => {
   const secret = req.headers["x-webhook-secret"]
-  const github_token = req.headers["x-github-token"]
+  const github_token = process.env.GITHUB_TOKEN
   const github_repo = req.headers["x-github-repo"]
   const github_branch = req.headers["x-github-branch"]
   const user = req.headers["x-server-namespace"]
