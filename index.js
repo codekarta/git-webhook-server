@@ -7,6 +7,7 @@ const PORT = 23001
 app.use(express.json())
 
 app.get("/", (req, res) => {
+  console.log("hello world called")
   res.send("Hello World!")
 })
 
